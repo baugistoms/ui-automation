@@ -1,0 +1,6 @@
+FROM ubuntu-jdk-mvn
+
+RUN mkdir docker
+
+WORKDIR ./docker
+
