@@ -2,10 +2,10 @@
 format_version: 10
 pipelines:
   node-microservice:
-    group: microservices
+    group: dockerTaskRebuild
     materials:
       gitrepo:
-        git: https://github.com/baugistoms/ci_course.git
+        git: https://github.com/baugistoms/ui-automation.git
         branch: main
     stages:
       - build-ubuntu-jdk-mvn:
