@@ -1,7 +1,7 @@
 ---
 format_version: 10
 pipelines:
-  node-microservice:
+  docker-rebuild:
     group: dockerTaskRebuild
     materials:
       gitrepo:
