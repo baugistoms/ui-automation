@@ -1,0 +1,13 @@
+## Run tests on selenium grid
+docker run -it --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-intermediate:4444
+
+mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-intermediate:4444
+mvn io.qameta.allure:allure-maven:report
+rm -rf test-output/*
+cp -r target/site/allure-maven-plugin test-output
+
+docker run -it --network=test-automation-setup-intermediate --rm --name mvn_tests baugist/mvn_tests
+
+docker build -t baugist/mvn_tests:latest . -f Dockerfile_tests
+
+docker build -t ubuntu-jdk-mvn . -f Dockerfile

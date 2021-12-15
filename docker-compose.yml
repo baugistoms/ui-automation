@@ -1,0 +1,39 @@
+version: '3.8'
+services:
+  selenium-hub-intermediate:
+    image: selenium/hub:latest
+    container_name: selenium-hub-intermediate
+    ports:
+      - 4444:4444
+  chrome:
+    image: selenium/node-chrome:latest
+    container_name: chrome-node-intermediate
+    depends_on:
+     - selenium-hub-intermediate
+    environment:
+    - SE_EVENT_BUS_HOST=selenium-hub-intermediate
+    - SE_EVENT_BUS_PUBLISH_PORT=4442
+    - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+  firefox:
+    image: selenium/node-firefox:latest
+    container_name: firefox-node-intermediate
+    depends_on:
+     - selenium-hub-intermediate
+    environment:
+    - SE_EVENT_BUS_HOST=selenium-hub-intermediate
+    - SE_EVENT_BUS_PUBLISH_PORT=4442
+    - SE_EVENT_BUS_SUBSCRIBE_PORT=4443
+  mvn-tests:
+    build:
+      context: ./
+      dockerfile: Dockerfile_tests
+    container_name: mvn-tests
+    volumes:
+      - $PWD/test-output:/docker/test-output
+    depends_on:
+      - selenium-hub-intermediate
+    command: bash -c "mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-intermediate:4444 && mvn io.qameta.allure:allure-maven:report && rm -rf test-output/* && cp -R target/site/allure-maven-plugin test-output"
+networks:
+  default:
+    external: true
+    name: test-automation-setup-intermediate

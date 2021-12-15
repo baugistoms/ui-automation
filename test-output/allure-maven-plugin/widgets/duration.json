@@ -1,0 +1,21 @@
+[ {
+  "uid" : "804461fcbbd35bed",
+  "name" : "Dynamic elements",
+  "time" : {
+    "start" : 1639519243450,
+    "stop" : 1639519256450,
+    "duration" : 13000
+  },
+  "status" : "passed",
+  "severity" : "normal"
+}, {
+  "uid" : "a5db390459dcbede",
+  "name" : "Dynamic elements",
+  "time" : {
+    "start" : 1639519243449,
+    "stop" : 1639519265997,
+    "duration" : 22548
+  },
+  "status" : "passed",
+  "severity" : "normal"
+} ]

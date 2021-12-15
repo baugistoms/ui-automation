@@ -2,5 +2,10 @@ FROM ubuntu-jdk-mvn
 
 RUN mkdir docker
 
+COPY . ./docker/
+
 WORKDIR ./docker
 
+RUN mvn dependency:resolve
+
+RUN mvn clean install -DskipTests
