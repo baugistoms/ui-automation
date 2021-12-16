@@ -13,7 +13,7 @@ pipeline {
                         deploy("stage")
                     } catch (error) {
                         sendNotification("stage_deployment", "failure")
-                        error "Failed with error ${error}, exiting now..."     
+                        sh "exit 1"   
                     } finally {
                         sendNotification("stage_deployment", "success")
                     }
@@ -28,7 +28,7 @@ pipeline {
                         sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-intermediate:4444"
                     } catch (error) {
                         sendNotification("stage_testing", "failure")
-                        error "Failed with error ${error}, exiting now..."     
+                        sh "exit 1"
                     } finally {
                         sendNotification("stage_testing", "success")
                     }
