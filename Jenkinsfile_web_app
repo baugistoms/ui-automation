@@ -12,11 +12,11 @@ pipeline {
                     try {
                         deploy("stage")
                         script {
-                            sendNotification("stage deployment", "success")
+                            sendNotification("stage_deployment", "success")
                         }
                     } catch (error) {
                         script {
-                            sendNotification("stage deployment", "failure")
+                            sendNotification("stage_deployment", "failure")
                         }
                         error "Failed with error ${error}, exiting now..."     
                     }
