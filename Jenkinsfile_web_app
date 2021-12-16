@@ -52,12 +52,12 @@ pipeline {
                             }
                         }
                     }
+                } finally {
+                    sendNotification("stage_testing", "success")
+                    sh "docker rm -f selenium-hub-tests-intermediate"
+                    sh "docker rm -f chrome-node-tests"
+                    sh "docker rm -f firefox-node-tests"
                 }
-                finally {
-                sendNotification("stage_testing", "success")
-                sh "docker rm -f selenium-hub-tests-intermediate"
-                sh "docker rm -f chrome-node-tests"
-                sh "docker rm -f firefox-node-tests"
             }
         }
         stage('deploy-prod') {
