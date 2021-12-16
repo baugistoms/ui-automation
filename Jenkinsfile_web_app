@@ -1,0 +1,104 @@
+pipeline {
+    agent any
+    stages { 
+        stage('build') {
+            steps {
+                echo "Building node application"
+            }
+        }
+        stage('deploy-stage') {
+            steps {
+                script {
+                    deploy("stage")
+                }
+                post{
+                    success {
+                        script {
+                            sendNotification("stage deployment", "success")
+                        }
+                    }
+                    failure {
+                        script {
+                            sendNotification("stage deployment", "failure")
+                        }
+                        error "Failed, exiting now..."
+                    }
+                }
+            }
+        }
+        stage('test-stage') {
+            steps {
+                script {
+                    test("stage")
+                }
+                post{
+                    success {
+                        script {
+                            sendNotification("stage testing", "success")
+                        }
+                    }
+                    failure {
+                        script {
+                            sendNotification("stage testing", "failure")
+                        }
+                    }
+                }
+            }
+        }
+        stage('deploy-prod') {
+            steps {
+                script {
+                    deploy("prod")
+                }
+                post{
+                    success {
+                        script {
+                            sendNotification("prod deployment", "success")
+                        }
+                    }
+                    failure {
+                        script {
+                            sendNotification("prod deployment", "failure")
+                        }
+                        error "Failed, exiting now..."
+                    }
+                }
+            }
+        }
+        stage('test-prod') {
+            steps {
+                script {
+                    test("prod")
+                }
+                post{
+                    success {
+                        script {
+                            sendNotification("prod testing", "success")
+                        }
+                    }
+                    failure {
+                        script {
+                            sendNotification("prod testing", "failure")
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+def sendNotification(String environment, String status) {
+    if (status == "success") {
+        sh "send_notification.sh ${environment} 0"
+    } else {
+        sh "send_notification.sh ${environment} 1"
+    }
+}
+def deploy(String environment) {
+    echo "Deployment to ${environment} triggered.."
+}
+
+def test(String environment) {
+    echo "Running tests on ${environment}.."
+    sh "docker pull baugist/mvn_tests:latest"
+}
