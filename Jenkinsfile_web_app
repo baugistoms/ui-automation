@@ -14,7 +14,9 @@ pipeline {
                 post{
                     success {
                         script {
-                            sendNotification("stage deployment", "success")
+                            try {
+                                sendNotification("stage deployment", "success")
+                            }
                         }
                     }
                     failure {
@@ -34,7 +36,9 @@ pipeline {
                 post{
                     success {
                         script {
-                            sendNotification("stage testing", "success")
+                            try {
+                                sendNotification("stage testing", "success")
+                            }
                         }
                     }
                     failure {
@@ -53,7 +57,9 @@ pipeline {
                 post{
                     success {
                         script {
-                            sendNotification("prod deployment", "success")
+                            try {
+                                sendNotification("prod deployment", "success")
+                            }
                         }
                     }
                     failure {
@@ -73,7 +79,9 @@ pipeline {
                 post{
                     success {
                         script {
-                            sendNotification("prod testing", "success")
+                            try {
+                                sendNotification("prod testing", "success")
+                            }
                         }
                     }
                     failure {
