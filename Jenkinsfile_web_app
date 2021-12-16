@@ -56,8 +56,10 @@ pipeline {
                     }
                 }
             }
-            script{
-                stopProcesses()
+            steps {
+                script{
+                    stopProcesses()
+                }
             }
         }
         stage('deploy-prod') {
