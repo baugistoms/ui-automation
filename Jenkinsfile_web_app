@@ -21,21 +21,41 @@ pipeline {
             }
         }
         stage('test-stage') {
-            steps {
+            try {
                 script {
-                    try {
-                        test("stage")
-                        sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
-                    } catch (error) {
-                        sendNotification("stage_testing", "failure")
-                        sh "exit 1"
-                    } finally {
-                        sendNotification("stage_testing", "success")
-                        sh "docker rm -f selenium-hub-tests-intermediate"
-                        sh "docker rm -f chrome-node-tests"
-                        sh "docker rm -f firefox-node-tests"
+                    test("stage")
+                }
+                parallel {
+                    stage('test-chrome') {
+                        steps {
+                            script {
+                                try {
+                                    sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
+                                } catch (error) {
+                                    sendNotification("stage_testing", "failure")
+                                    sh "exit 1"
+                                }
+                            }
+                        }
+                    }
+                    stage('test-firefox') {
+                        steps {
+                            script {
+                                try {
+                                    sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=firefox -DgridURL=selenium-hub-tests-intermediate:4444"
+                                } catch (error) {
+                                    sendNotification("stage_testing", "failure")
+                                    sh "exit 1"
+                                }
+                            }
+                        }
                     }
                 }
+            } finally {
+                sendNotification("stage_testing", "success")
+                sh "docker rm -f selenium-hub-tests-intermediate"
+                sh "docker rm -f chrome-node-tests"
+                sh "docker rm -f firefox-node-tests"
             }
         }
         stage('deploy-prod') {
