@@ -64,13 +64,12 @@ pipeline {
                     steps {
                         script {
                             try {
-                                sh "docker run -d -t --name mvn-tests-stage-firefox --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=firefox -DgridURL=selenium-hub-tests-intermediate:4444"
+                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=firefox -DgridURL=selenium-hub-tests-intermediate:4444"
                             } catch (error) {
                                 sendNotification("stage_testing_firefox", "failure")
                                 sh "exit 1"
                             } finally {
                                 sendNotification("stage_testing_firefox", "success")
-                                sh "docker rm mvn-tests-stage-firefox"
                             }
                         }
                     }
