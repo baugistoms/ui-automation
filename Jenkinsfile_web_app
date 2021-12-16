@@ -33,7 +33,7 @@ pipeline {
                     steps {
                         script {
                             try {
-                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests:4444"
+                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
                             } catch (error) {
                                 sendNotification("stage_testing_chrome", "failure")
                                 sh "exit 1"
@@ -47,7 +47,7 @@ pipeline {
                     steps {
                         script {
                             try {
-                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=firefox -DgridURL=selenium-hub-tests:4444"
+                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=firefox -DgridURL=selenium-hub-tests-intermediate:4444"
                             } catch (error) {
                                 sendNotification("stage_testing_firefox", "failure")
                                 sh "exit 1"
@@ -78,7 +78,7 @@ pipeline {
                     steps {
                         script {
                             try {
-                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests:4444"
+                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
                             } catch (error) {
                                 sendNotification("prod_testing_chrome", "failure")
                                 sh "exit 1"
@@ -92,7 +92,7 @@ pipeline {
                     steps {
                         script {
                             try {
-                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=firefox -DgridURL=selenium-hub-tests:4444"
+                                sh "docker run --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=firefox -DgridURL=selenium-hub-tests-intermediate:4444"
                             } catch (error) {
                                 sendNotification("prod_testing_firefox", "failure")
                                 sh "exit 1"
