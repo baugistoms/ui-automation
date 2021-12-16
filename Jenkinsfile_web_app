@@ -8,21 +8,16 @@ pipeline {
         }
         stage('deploy-stage') {
             steps {
-                script {
+                try {
                     deploy("stage")
-                }
-                post{
-                    success {
-                        script {
-                            sendNotification("stage deployment", "success")
-                        }
+                    script {
+                        sendNotification("stage deployment", "success")
                     }
-                    failure {
-                        script {
-                            sendNotification("stage deployment", "failure")
-                        }
-                        error "Failed, exiting now..."
+                } catch (error) {
+                    script {
+                        sendNotification("stage deployment", "failure")
                     }
+                    error "Failed with error ${error}, exiting now..."     
                 }
             }
         }
