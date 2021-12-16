@@ -14,9 +14,7 @@ pipeline {
                 post{
                     success {
                         script {
-                            try {
-                                sendNotification("stage deployment", "success")
-                            }
+                            sendNotification("stage deployment", "success")
                         }
                     }
                     failure {
@@ -36,9 +34,7 @@ pipeline {
                 post{
                     success {
                         script {
-                            try {
-                                sendNotification("stage testing", "success")
-                            }
+                            sendNotification("stage testing", "success")
                         }
                     }
                     failure {
@@ -57,9 +53,7 @@ pipeline {
                 post{
                     success {
                         script {
-                            try {
-                                sendNotification("prod deployment", "success")
-                            }
+                            sendNotification("prod deployment", "success")
                         }
                     }
                     failure {
@@ -79,9 +73,7 @@ pipeline {
                 post{
                     success {
                         script {
-                            try {
-                                sendNotification("prod testing", "success")
-                            }
+                            sendNotification("prod testing", "success")
                         }
                     }
                     failure {
@@ -97,9 +89,9 @@ pipeline {
 
 def sendNotification(String environment, String status) {
     if (status == "success") {
-        sh "send_notification.sh ${environment} 0"
+        sh "bash send_notification.sh ${environment} 0"
     } else {
-        sh "send_notification.sh ${environment} 1"
+        sh "bash send_notification.sh ${environment} 1"
     }
 }
 def deploy(String environment) {
