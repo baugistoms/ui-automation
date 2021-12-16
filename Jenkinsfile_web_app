@@ -78,6 +78,7 @@ def deploy(String environment) {
 def test(String environment) {
     echo "Running tests on ${environment}.."
     sh "docker pull baugist/mvn_tests:latest"
+    sh "docker rm -f selenium-hub-tests"
     sh "docker run -d -p 4442-4444:4442-4444 --net test-automation-setup-intermediate --rm --name selenium-hub-tests selenium/hub:latest"
     sh "docker run -d --rm --net test-automation-setup-intermediate -e SE_EVENT_BUS_HOST=selenium-hub-tests -e SE_EVENT_BUS_PUBLISH_PORT=4442 -e SE_EVENT_BUS_SUBSCRIBE_PORT=4443 selenium/node-chrome:latest"
     sh "docker run -d --rm --net test-automation-setup-intermediate -e SE_EVENT_BUS_HOST=selenium-hub-tests -e SE_EVENT_BUS_PUBLISH_PORT=4442 -e SE_EVENT_BUS_SUBSCRIBE_PORT=4443 selenium/node-firefox:latest"
