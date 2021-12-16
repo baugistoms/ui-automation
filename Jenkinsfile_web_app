@@ -11,13 +11,9 @@ pipeline {
                 script {
                     try {
                         deploy("stage")
-                        script {
-                            sendNotification("stage_deployment", "success")
-                        }
+                        sendNotification("stage_deployment", "success")
                     } catch (error) {
-                        script {
-                            sendNotification("stage_deployment", "failure")
-                        }
+                        sendNotification("stage_deployment", "failure")
                         error "Failed with error ${error}, exiting now..."     
                     }
                 }
@@ -26,18 +22,12 @@ pipeline {
         stage('test-stage') {
             steps {
                 script {
-                    test("stage")
-                }
-                post{
-                    success {
-                        script {
-                            sendNotification("stage testing", "success")
-                        }
-                    }
-                    failure {
-                        script {
-                            sendNotification("stage testing", "failure")
-                        }
+                    try {
+                        test("stage")
+                        sendNotification("stage_testing", "success")
+                    } catch (error) {
+                        sendNotification("stage_testing", "failure")
+                        error "Failed with error ${error}, exiting now..."     
                     }
                 }
             }
@@ -45,19 +35,12 @@ pipeline {
         stage('deploy-prod') {
             steps {
                 script {
-                    deploy("prod")
-                }
-                post{
-                    success {
-                        script {
-                            sendNotification("prod deployment", "success")
-                        }
-                    }
-                    failure {
-                        script {
-                            sendNotification("prod deployment", "failure")
-                        }
-                        error "Failed, exiting now..."
+                    try {
+                        deploy("prod")
+                        sendNotification("prod_deployment", "success")
+                    } catch (error) {
+                        sendNotification("prod_deployment", "failure")
+                        error "Failed with error ${error}, exiting now..."     
                     }
                 }
             }
@@ -65,18 +48,12 @@ pipeline {
         stage('test-prod') {
             steps {
                 script {
-                    test("prod")
-                }
-                post{
-                    success {
-                        script {
-                            sendNotification("prod testing", "success")
-                        }
-                    }
-                    failure {
-                        script {
-                            sendNotification("prod testing", "failure")
-                        }
+                    try {
+                        test("prod")
+                        sendNotification("prod_testing", "success")
+                    } catch (error) {
+                        sendNotification("prod_testing", "failure")
+                        error "Failed with error ${error}, exiting now..."     
                     }
                 }
             }
