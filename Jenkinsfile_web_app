@@ -33,7 +33,7 @@ pipeline {
                     steps {
                         script {
                             try {
-                                sh "docker run --name mvn-tests-stage-chrome --network=test-automation-setup-intermediate baugist/mvn_tests mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
+                                sh "docker run --network=test-automation-setup-intermediate --name mvn-tests-stage-chrome baugist/mvn_tests:latest mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
                                 sh "docker exec mvn-tests-stage-chrome mvn io.qameta.allure:allure-maven:report"
                                 sh "docker exec mvn-tests-stage-chrome rm -rf test-output/*"
                                 sh "docker exec mvn-tests-stage-chrome cp -R target/site/allure-maven-plugin test-output"
