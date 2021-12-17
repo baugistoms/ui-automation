@@ -86,7 +86,7 @@ def deploy(String environment) {
 
 def deployAndSendNotification(String environment) {
     try {
-        deploy(${environment})
+        deploy(environment)
     } catch (error) {
         sendNotification("${environment}-deployment", "failure")
         error("Deployment to ${environment} failed")
@@ -113,7 +113,7 @@ def stopSeleniumProcesses() {
 }
 
 def runTestsAndGetReport(String testingEnv) {
-    test(${testingEnv})
+    test(testingEnv)
     try {
         sh "docker run -d -t --network=test-automation-setup-intermediate --name mvn-tests-${testingEnv} baugist/mvn_tests:latest"
         sh "docker exec mvn-tests-${testingEnv} mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
