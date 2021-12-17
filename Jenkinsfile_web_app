@@ -16,14 +16,7 @@ pipeline {
         stage('deploy-stage') {
             steps {
                 script {
-                    try {
-                        deploy("stage")
-                    } catch (error) {
-                        sendNotification("stage-deployment", "failure")
-                        error("Deployment to stage failed")
-                    } finally {
-                        sendNotification("stage-deployment", "success")
-                    }
+                    deployAndSendNotification("stage")
                 }
             }
         }
@@ -48,13 +41,7 @@ pipeline {
         stage('deploy-prod') {
             steps {
                 script {
-                    try {
-                        deploy("prod")
-                        sendNotification("prod_deployment", "success")
-                    } catch (error) {
-                        sendNotification("prod_deployment", "failure")
-                        error("Deployment to prod failed")     
-                    }
+                    deployAndSendNotification("prod")
                 }
             }
         }
@@ -97,6 +84,17 @@ def deploy(String environment) {
     echo "Deployment to ${environment} triggered.."
 }
 
+def deployAndSendNotification(String environment) {
+    try {
+        deploy(${environment})
+    } catch (error) {
+        sendNotification("${environment}-deployment", "failure")
+        error("Deployment to ${environment} failed")
+    } finally {
+        sendNotification("${environment}-deployment", "success")
+    }
+}
+
 def test(String environment) {
     echo "Running tests on ${environment}.."
     sh "docker pull baugist/mvn_tests:latest"
@@ -115,6 +113,7 @@ def stopSeleniumProcesses() {
 }
 
 def runTestsAndGetReport(String testingEnv) {
+    test(${testingEnv})
     try {
         sh "docker run -d -t --network=test-automation-setup-intermediate --name mvn-tests-${testingEnv} baugist/mvn_tests:latest"
         sh "docker exec mvn-tests-${testingEnv} mvn clean test -Dbrowser=chrome -DgridURL=selenium-hub-tests-intermediate:4444"
